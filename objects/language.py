@@ -1,8 +1,16 @@
+"""
+Object Oriented Language Object -
+Written to create languages objects to fall from the sky for Snake It game
+This code is open source and free to use
+"""
+
 import pygame
 from random import randint, choice
 
-class Language():
+class Language:
     def __init__(self):
+        """__init__ constructor function of Language class
+        """
         self.languages_images = ["assets/languages/c.png", "assets/languages/c#.png",
                             "assets/languages/c++.png", "assets/languages/elixir.png", 
                             "assets/languages/go.png", "assets/languages/java.png",
@@ -13,6 +21,11 @@ class Language():
         self.y = 0
 
     def move(self, win):
+        """move move the language image down
+
+        Args:
+            win (pygame.display): the window to move the langauge on
+        """
         self.y += 5
         if self.y > 1080:
             del self

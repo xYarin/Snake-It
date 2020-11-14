@@ -1,8 +1,16 @@
+"""
+Object Oriented Config Object -
+Written to get data from json file, in order to get database cords
+This code is open source and free to use
+"""
+
 import json
 
 class Config:
     def __init__(self):
-        with open("config.json", 'r') as f:
+        """__init__ constructor function for Config class
+        """
+        with open("database/config.json", 'r') as f:
             self.data = json.load(f)
     
     def get_mongodb_link(self):
@@ -14,12 +22,27 @@ class Config:
         return self.data["mongodb-link"]
     
     def get_username(self):
+        """get_username get username from config.json file
+
+        Returns:
+            str: the username of database account
+        """
         return self.data["username"]
     
     def get_password(self):
+        """get_password get password from config.json file
+
+        Returns:
+            str: the password of database account
+        """
         return self.data["password"]
 
     def get_host(self):
+        """get_host creates the host link to connect MongoDB database
+
+        Returns:
+            str: the host link
+        """
         link = self.get_mongodb_link()
         link = link.replace("<username>", self.get_username())
         link = link.replace("<password>", self.get_password())

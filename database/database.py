@@ -8,7 +8,6 @@ class Database(MongoClient):
         self.cluster = MongoClient(host)
         self.db = self.cluster[db_name]
         self.collection = self.db[collection]
-        print("Database created")
     
     def clear_collection(self):
         """clear_collection deletes all collection (usernames, passwords, high scores, etc...)
