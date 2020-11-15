@@ -5,7 +5,7 @@ from objects.language import Language
 from database.database import Database
 from database.db_config import Config
 from texts.inputbox import InputBox
-from texts.text import Text
+from texts.text import Text 
 from game import start_play
 from menu import run_menu
 

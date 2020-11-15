@@ -5,6 +5,7 @@ import os
 from objects.button import Button
 from texts.text import Text
 from game import start_play
+import asyncio
 x = 0
 y = 30
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
@@ -42,7 +43,7 @@ def run_menu():
     signup_button = Button((97, 44, 176), 1325, 650, 200, 100, "Sign Up", 42)
     # set the center of the rectangular object. 
 
-    images_to_blit = [[game_background, (0, 0)], [text.text, (text.x, text.y)]]
+    images_to_blit = [[game_background, (0, 0)]]
     #input_boxes = [textinput, textinput2]
     
     # create the display surface object 
@@ -61,13 +62,14 @@ def run_menu():
         for event in events:
             pos = pygame.mouse.get_pos()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button.isOver(pos) and logged_in:
+                if play_button.isOver(pos) and logged_in == False:
                     print("Button clicked!")
                     running = False
                     start_play()
                     exit()
             if event.type == pygame.MOUSEMOTION:
-                if play_button.isOver(pos) and logged_in:
+                #if play_button.isOver(pos) and logged_in:
+                if play_button.isOver(pos):
                     play_button.color = (92, 176, 86)
                 else:
                     play_button.color = (104, 209, 98)
@@ -92,7 +94,7 @@ def run_menu():
         #     menu_win.blit(image[0], (image[1][0], image[1][1]))
         menu_win.blit(game_background, (0, 0))
         text.draw(menu_win)
-        if logged_in:
+        if logged_in == False:
             play_button.draw(menu_win, outline=(0, 0, 0))
         else:
             login_button.draw(menu_win, (0, 0, 0))
