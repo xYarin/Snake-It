@@ -20,6 +20,7 @@ class Language:
         self.image = pygame.image.load(choice(self.languages_images))
         self.x = randint(0, 1700)
         self.y = 0
+        self.isOnScreen = False
 
     def move(self, win, player):
         """move move the language image down
@@ -27,17 +28,18 @@ class Language:
         Args:
             win (pygame.display): the window to move the langauge on
         """
-        self.y += 5
+        self.y += 20
         if (self.y > 1080) or (self.x in range(player.x - 120, player.x + 100) and self.y in range (player.y - 30, player.y + 500)):
+            self.isOnScreen = False
             self.y = 0
             self.x = randint(0, 1700)
             self.image = pygame.image.load(choice(self.languages_images))
 
-        else:
-            win.blit(self.image , (self.x, self.y))
+        self.draw(win)
+        pygame.display.update()
 
+    def draw(self, win):
+        win.blit(self.image, (self.x, self.y))
     
-def languages_timer(score, languages_list, win, player):
-    for language in languages_list:        
-        sleep(score/20 + 1)
-        language.move(win, player)
+    def set_on_screen(self):
+        self.isOnScreen = True
