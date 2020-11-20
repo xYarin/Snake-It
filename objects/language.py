@@ -8,6 +8,7 @@ import pygame
 from math import sqrt
 from random import randint, choice
 from time import sleep
+from objects.player import is_collided
 
 class Language:
     def __init__(self):
@@ -18,28 +19,74 @@ class Language:
                             "assets/languages/js.png", "assets/languages/php.png", 
                             "assets/languages/ruby.png", "assets/languages/rust.png"]
         self.image = pygame.image.load(choice(self.languages_images))
+        #self.image = pygame.transform.scale1.4x(self.image)
         self.x = randint(0, 1700)
         self.y = 0
         self.isOnScreen = False
+        self.vel = 10
+        self.pre_score = 0
 
-    def move(self, win, player):
+    def move(self, win, player, languages):
+        self.change_vel(player.score, languages)
         """move move the language image down
 
         Args:
             win (pygame.display): the window to move the langauge on
         """
-        self.y += 20
-        if (self.y > 1080) or (self.x in range(player.x - 120, player.x + 100) and self.y in range (player.y - 30, player.y + 500)):
-            self.isOnScreen = False
-            self.y = 0
-            self.x = randint(0, 1700)
-            self.image = pygame.image.load(choice(self.languages_images))
-
+        if self.isOnScreen:
+            print(self.vel)
+            self.y += self.vel
+        if (self.y > 1080):
+            if self.remove_heart(player.hearts) == False:
+                return False
+            self.reset_place()
         self.draw(win)
-        pygame.display.update()
+
+    def reset_place(self):
+        """reset_place reset the object after catching it to y = 0 and choose another image
+        """
+        self.isOnScreen = False
+        self.y = 0
+        self.x = randint(0, 1700)
+        self.image = pygame.image.load(choice(self.languages_images))
 
     def draw(self, win):
-        win.blit(self.image, (self.x, self.y))
+        """draw draw the object on screen
+
+        Args:
+            win (pygame.display): the screen to display the image
+        """
+        if self.isOnScreen:
+            win.blit(self.image, (self.x, self.y))
     
     def set_on_screen(self):
+        """set_on_screen set the isOnScreen variable for True
+        """
         self.isOnScreen = True
+
+    
+    def change_vel(self, score, languages):
+        """change_vel change the image speed according to the score
+
+        Args:
+            score (int): player's game score
+        """
+        if score % 10 == 0 and score != 0 and score != self.pre_score:
+            self.pre_score = score  
+            for lang in languages:
+                lang.vel += 1
+                print(lang.vel)
+        # if score != 0 and score != self.pre_score:
+        #     self.pre_score = score
+        #     for lang in languages:
+        #         lang.vel += 0.5               
+        #         print(self.vel)
+
+    @staticmethod
+    def remove_heart(hearts):
+        if len(hearts) != 1:
+            hearts.pop(0)
+        else:
+            hearts.pop(0)
+            return False
+                

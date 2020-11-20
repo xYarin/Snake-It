@@ -4,6 +4,7 @@ This code is open source and free to use
 """
 
 import pygame
+import typing
 pygame.init()
 pygame.font.init()
 
@@ -21,9 +22,12 @@ class Text:
         self.x = x
         self.color = color
         self.y = y
-        self.font = pygame.font.SysFont(font, size)
+        self.size = size
+        self.font_name = font
+        self.font = pygame.font.SysFont(self.font_name, self.size)
+        self.text = self.font.render('', True, self.color)
 
-    def set_text(self, text, underline = False, bold = True):
+    def set_text(self, text, underline = False, bold = False):
         """set_text set text caption
 
         Args:
@@ -38,9 +42,6 @@ class Text:
         if self.bold:
             self.font.set_bold(True)
         self.text = self.font.render(text, True, self.color)
-        self.text_rect = self.text.get_rect()
-        self.text_rect.center = (self.x, self.y)
-        
     
     def draw(self, win):
         """draw blit the text on screen
@@ -48,4 +49,13 @@ class Text:
         Args:
             win (pygame.display): pygame window to display the text on
         """
-        win.blit(self.text, self.text_rect)
+        win.blit(self.text, (self.x, self.y))
+
+    def replace(self, x : typing.Optional[int], y : typing.Optional[int], size : typing.Optional[int]):
+        if x is not None:
+            self.x = x
+        if y is not None:
+            self.y = y
+        if size != None:
+            self.size = size
+            self.font = pygame.font.SysFont(self.font_name, self.size)

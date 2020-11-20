@@ -28,7 +28,7 @@ class Database(MongoClient):
         return False
     
     def get_query_by_username(self, username : str):
-        """get_post_by_username get post / query from collection by giving username
+        """get_query_by_username get post / query from collection by giving username
 
         Args:
             username (str): username to get query of
@@ -56,6 +56,7 @@ class Database(MongoClient):
         if self.user_exists(post["username"]):
             raise UserNameExistsError
         post["username_lower"] = post["username"].lower()
+        post["best_score"] = 0
         self.collection.insert_one(post)
     
     def check_password(self, username, password):
@@ -68,7 +69,7 @@ class Database(MongoClient):
         Returns:
             bool: true if password matches, false otherwise
         """
-        post = self.get_post_by_username(username)
+        post = self.get_query_by_username(username)
         return post["password"] == password
     
     def change_password(self, query, new_password):
@@ -102,7 +103,6 @@ class Database(MongoClient):
             UserNameExistsError: if you are trying to change to an already exists username
         """
         if self.check_password(query["username"], query["password"]) == False:
-            print("HELLO LINE 50 SUPP")
             raise WrongPasswordError
         if query["username"] == new_username:
             raise SameUserNameError
@@ -110,11 +110,9 @@ class Database(MongoClient):
             raise UserNameExistsError
         self.collection.update_many({"_id" : query["_id"]} ,{"$set" : {"username" : new_username, "username_lower" : new_username.lower()}})
     
-    def sign_up(self):
+    def sign_up(self, username, password):
         """sign_up signs up a new user to the system / collection
         """
-        username = input("Enter username: ")
-        password = input("Enter password: ")
         post = {"username" : username, "password" : password}
         self.add_user(post)
         print(f"Signed up as {post['username']}")
@@ -129,12 +127,18 @@ class Database(MongoClient):
             dict: query of the account logged in
         """
         post = {"username" : username, "password" : password}
-        db_post = self.get_post_by_username(username)
+        db_post = self.get_query_by_username(username)
         if db_post["username_lower"] == post["username"].lower() and db_post["password"] == post["password"]:
             print(f"Logged in as {db_post['username']}")
-            return self.get_post_by_username(post["username"])
+            return self.get_query_by_username(post["username"])
         else:
-            raise WrongPasswordError
+            try:
+                raise WrongPasswordError
+            except WrongPasswordError:
+                return False
 
-    def get_bestscore(self, username):
-        pass
+    def update_bestscore(self, username, score):
+        user = self.get_query_by_username(username)
+        best_score = user["best_score"]
+        self.collection.update_many({"_id" : user['_id']}, {"$max" : {"best_score" : score}})
+        return score > best_score

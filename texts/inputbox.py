@@ -6,10 +6,12 @@ This code is open source in some github repo
 
 import pygame as pg
 pg.init()
-FONT = pg.font.Font(None, 32)
+FONT = pg.font.SysFont("freesansbold", 46)
+COLOR_INACTIVE = pg.Color('lightskyblue3')
+COLOR_ACTIVE = pg.Color('dodgerblue2')
 
 class InputBox:
-    def __init__(self, x, y, w, h, text='', password=False, COLOR_ACTIVE = (46, 42, 42), COLOR_INACTIVE = (0, 0, 0)):
+    def __init__(self, x, y, w, h, text='', password=False):
         """__init__ constructor function for InputBox class
 
         Args:
@@ -61,7 +63,7 @@ class InputBox:
                     else:
                         self.text += event.unicode
                 # Re-render the text.
-                self.txt_surface = FONT.render(self.text, True, self.color)
+                self.txt_surface = FONT.render(self.text, True, (0, 0, 0))
 
     def update(self):
         """update resizes the box if the text is too long
