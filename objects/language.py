@@ -19,7 +19,7 @@ class Language:
                             "assets/languages/js.png", "assets/languages/php.png", 
                             "assets/languages/ruby.png", "assets/languages/rust.png"]
         self.image = pygame.image.load(choice(self.languages_images))
-        #self.image = pygame.transform.scale1.4x(self.image)
+        #self.image = pygame.image.load("assets/game/adir_elad.png")
         self.x = randint(0, 1700)
         self.y = 0
         self.isOnScreen = False

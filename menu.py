@@ -7,7 +7,7 @@ from database.db_config import Config
 from objects.button import Button
 from texts.text import Text
 from game import start_play
-import asyncio
+
 x = 0
 y = 30
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)

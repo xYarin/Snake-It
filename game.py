@@ -24,7 +24,7 @@ pygame.init()
 def start_play(user):
     """start_play starts the game screen
     """
-    mixer.music.load("assets/sounds/gameplay_music.mp3")
+    mixer.music.load("assets\\sounds\\gameplay_music.mp3")
     print(mixer.music.get_busy())
     if not mixer.music.get_busy():
         #mixer.music.play(-1)
@@ -34,8 +34,8 @@ def start_play(user):
     textinput = InputBox(20, 20, 200, 50, '', True)
     textinput2 = InputBox(500, 500, 200, 50 , '', False)
     game_win = pygame.display.set_mode((1920, 1080))
-    game_background = pygame.image.load("assets/game/game_background.jpg")   
-    player = Player("assets/player/snake.png", 700, 700)
+    game_background = pygame.image.load("assets\\game\\game_background.jpg")   
+    player = Player("assets\\player\\snake.png", 700, 700)
     language1 = Language()
     language2 = Language()
     language3 = Language()

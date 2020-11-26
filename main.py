@@ -14,6 +14,7 @@ pygame.init()
 db = Database(config.get_host(), config.get_db_name(), config.get_collection())
 collection = db.collection
 
+
 x = 0
 y = 30
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
