@@ -28,6 +28,7 @@ class Player:
         self.heart2 = Heart(1780, 26)
         self.heart3 = Heart(1840, 26)
         self.hearts = [self.heart1, self.heart2, self.heart3]
+        self.can_boost = True
 
 
     def move(self, win):
@@ -40,7 +41,7 @@ class Player:
         if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and (self.x < 1920 - 200):
             if not self.isRight:
                 self.image = pygame.transform.flip(self.image, True, False)
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_SPACE] and self.can_boost:
                 self.dash("right")
             else:
                 self.x += self.vel
@@ -49,7 +50,7 @@ class Player:
         if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and (self.x > 0):
             if self.isRight:
                 self.image = pygame.transform.flip(self.image, True, False)
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_SPACE] and self.can_boost:
                 self.dash("left")
             else:
                 self.x -= self.vel

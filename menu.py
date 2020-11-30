@@ -10,6 +10,7 @@ from game import start_play
 
 x = 0
 y = 30
+pygame.mixer.pre_init(44100, 16, 2, 4096)
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
 pygame.init()
 pygame.font.init()
@@ -17,12 +18,13 @@ pygame.font.init()
 config = Config()
 db = Database(config.get_host(), config.get_db_name(), config.get_collection())
 logged_in = False
-def run_menu(user=None, logged_in=False):
+mixer.music.load("assets/sounds/menu_music.mp3")
+def run_menu(user=None, logged_in=False, music=True):
     """run_menu starts the menu
     """
-    mixer.music.load("assets/sounds/menu_music.mp3")
-    mixer.music.play(-1)
-    print(mixer.music.set_volume(0.3684))
+    if music:
+        mixer.music.play(-1)
+    mixer.music.set_volume(0.25)
     CLOCK = pygame.time.Clock()
     FPS = 60
     white = (255, 255, 255) 
@@ -45,11 +47,11 @@ def run_menu(user=None, logged_in=False):
     if user is not None:
         user_text = Text(100, 100, "arial", 42)
         user_text.set_text(f"Welcome Back - {user['username']}")
-    title_text = Text(830, 400, "arial", 62) 
-    title_text.set_text("Snake It!", underline=True, bold=True)
-    play_button = Button((104, 209, 98), 850, 500, 200, 100, "Play!", 46)
-    login_button = Button((38, 90, 181), 400, 650, 200, 100, "Login", 42)
-    signup_button = Button((97, 44, 176), 1325, 650, 200, 100, "Sign Up", 42)
+    title_text = Text(830, 370, "arial", 80) 
+    title_text.set_text("Snake It!", bold=True)
+    play_button = Button((0, 0, 0), 850, 500, 200, 100, "Play!", 46)
+    login_button = Button((0, 0, 0), 400, 650, 200, 100, "Login", 42)
+    signup_button = Button((0, 0, 0), 1325, 650, 200, 100, "Sign Up", 42)
     # set the center of the rectangular object. 
 
     images_to_blit = [[game_background, (0, 0)]]
@@ -85,15 +87,15 @@ def run_menu(user=None, logged_in=False):
                 if play_button.isOver(pos):
                     play_button.color = (92, 176, 86)
                 else:
-                    play_button.color = (104, 209, 98)
+                    play_button.color = (255, 255, 255)
                 if login_button.isOver(pos) and not logged_in:
                     login_button.color = (17, 63, 143)
                 else:
-                    login_button.color = (38, 90, 181)
+                    login_button.color = (255, 255, 255)
                 if signup_button.isOver(pos) and not logged_in:
                     signup_button.color = (76, 29, 145)
                 else:
-                    signup_button.color = (97, 44, 176)
+                    signup_button.color = (255, 255, 255)
             if event.type == pygame.QUIT:
                 menu_run = False
 
@@ -142,7 +144,8 @@ def open_login(logged_in):
                     else:
                         logged_in = True
                         print("Logged in is {}".format(logged_in))
-                        run_menu(user, logged_in)
+                        mixer.fadeout(1)
+                        run_menu(user, logged_in, music=False)
                         exit() 
             if event.type == pygame.MOUSEMOTION:
                 if login_button.isOver(pos):

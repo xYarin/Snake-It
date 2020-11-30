@@ -14,9 +14,16 @@ db = Database(config.get_host(), config.get_db_name(), config.get_collection())
 x = 0
 y = 30
 
-
+pygame.mixer.pre_init(44100, 16, 2, 4096)
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
 pygame.init()
+failed_sound = mixer.Sound("assets\\sounds\\fail_sound.wav")
+catch_sound = mixer.Sound("assets\\sounds\\catch_sound.wav")
+miss_sound = mixer.Sound("assets\\sounds\\miss_sound.wav")
+mixer.music.load("assets\\sounds\\gameplay_music.mp3")
+sounds = [failed_sound, catch_sound, miss_sound]
+for sound in sounds:      
+    sound.set_volume(1)
 
 
 
@@ -24,11 +31,11 @@ pygame.init()
 def start_play(user):
     """start_play starts the game screen
     """
-    mixer.music.load("assets\\sounds\\gameplay_music.mp3")
-    print(mixer.music.get_busy())
-    if not mixer.music.get_busy():
-        #mixer.music.play(-1)
-        pass
+    
+    #print(mixer.music.get_busy())
+    
+    mixer.music.play(-1)
+    mixer.music.set_volume(0.15)
     CLOCK = pygame.time.Clock()
     FPS = 60
     textinput = InputBox(20, 20, 200, 50, '', True)
@@ -52,6 +59,8 @@ def start_play(user):
     best_score_text = Text(800, 200, "freesans", 40)
     score_text = Text(30, 25, "freesans", 30)
     score_text.set_text("Score: ")
+    
+
     
         
 
@@ -89,6 +98,7 @@ def start_play(user):
         for lang in languages:
             if lang.isOnScreen:
                 if is_collided(player.x + 100, player.y, lang.x, lang.y):
+                    catch_sound.play()
                     lang.reset_place()
                     player.update_score()
                 if not failed:
@@ -99,6 +109,8 @@ def start_play(user):
                             best_score_text.set_text("new record!")
                         for lang in languages:
                             lang.isOnScreen = False
+                        mixer.music.stop()
+                        failed_sound.play()
         
         for heart in player.hearts:
             heart.draw(game_win)

@@ -5,10 +5,13 @@ This code is open source and free to use
 """
 
 import pygame
+from pygame import mixer
 from math import sqrt
 from random import randint, choice
 from time import sleep
 from objects.player import is_collided
+
+miss_sound = mixer.Sound("assets\\sounds\\miss_sound.wav")
 
 class Language:
     def __init__(self):
@@ -25,6 +28,7 @@ class Language:
         self.isOnScreen = False
         self.vel = 10
         self.pre_score = 0
+        
 
     def move(self, win, player, languages):
         self.change_vel(player.score, languages)
@@ -34,11 +38,11 @@ class Language:
             win (pygame.display): the window to move the langauge on
         """
         if self.isOnScreen:
-            print(self.vel)
             self.y += self.vel
         if (self.y > 1080):
             if self.remove_heart(player.hearts) == False:
                 return False
+            miss_sound.play()
             self.reset_place()
         self.draw(win)
 
